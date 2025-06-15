@@ -7,7 +7,7 @@ import Library from "./pages/Library";
 
 function App() {
   return (
-    <div className="ml-4 mt-6">
+    <div className="pl-4 pt-6 bg-light-yellow min-h-screen">
       {/* Navbar */}
       <Navbar />
       <div>

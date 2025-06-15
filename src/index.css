@@ -3,9 +3,9 @@
 
 @theme {
   /* Fonts */
+  --font-ink: "Inknut Antiqua", 'serif';
   --font-josefin: 'Josefin Sans', 'sans-serif';
   --font-poppins: "Poppins", 'sans-serif';
-  --font-ink: "Inknut Antiqua", 'serif';
   
   /* Colors */
   --color-light-yellow: #FFEFCB;
