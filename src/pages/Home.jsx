@@ -6,7 +6,9 @@ export default function Home() {
   );
 }
 
-// TODO Set up the react router for two pages
+// TODO Set up navbar
+// TODO Set up custom theme colors and fonts
+
 // TODO Set up context API with local storage for tracking book data
 // TODO Track evolution of the assigned creature and XP required to evolve it
 

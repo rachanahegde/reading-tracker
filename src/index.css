@@ -1,13 +1,20 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap"); /* Import Montserrat font for body + headers and Red Hat Display font for headers */
+@import url('https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@300;400;500;600;700;800;900&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import "tailwindcss";
-
-/* TODO Update fonts and colors */
 
 @theme {
   /* Fonts */
-  --font-montserrat: 'Montserrat', 'sans-serif';
+  --font-josefin: 'Josefin Sans', 'sans-serif';
+  --font-poppins: "Poppins", 'sans-serif';
+  --font-ink: "Inknut Antiqua", 'serif';
   
   /* Colors */
-  --color-light-grey: #EDEDED;
-
+  --color-light-yellow: #FFEFCB;
+  --color-medium-yellow: #FFC43B;
+  --color-tangerine: #DF5D37;
+  --color-light-green: #EEF6CE;
+  --color-light-blue: #DFFAFD;
+  --color-light-purple: #ECE1FF;
+  --color-dark-brown: #613131;
+  --color-medium-brown: #7B2E2E;
+  
 }
