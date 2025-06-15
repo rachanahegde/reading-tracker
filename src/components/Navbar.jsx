@@ -3,14 +3,14 @@ import logo from "../assets/icons/logo.png";
 
 export default function Navbar() {
   return (
-    <div>
+    <div className="">
       <div>
-        <img src={logo} className="w-20" />
+        <img src={logo} className="w-10" />
         <h1>Storydex</h1>
       </div>
       <div>
-        <NavLink> Home</NavLink>
-        <NavLink> Library</NavLink>
+        <NavLink to="/home"> Home</NavLink>
+        <NavLink to="/library"> Library</NavLink>
       </div>
     </div>
   );
