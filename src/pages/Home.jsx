@@ -1,4 +1,7 @@
+// Import components
 import MainCreatureCard from "../components/MainCreatureCard";
+import CurrentlyReading from "../components/CurrentlyReading";
+import ProgressUpdates from "../components/ProgressUpdates";
 
 export default function Home() {
   return (
@@ -8,6 +11,8 @@ export default function Home() {
       </h1>
       {/* Card displaying dragon with background, buttons for adding book and selecting background, creature progress bar, books read, total XP, menagerie button and view all books btn */}
       <MainCreatureCard />
+      <CurrentlyReading />
+      <ProgressUpdates />
     </div>
   );
 }
