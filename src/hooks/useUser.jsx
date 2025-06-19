@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 
 // TODO REVIEW THIS ENTIRE CODE FILE AND MAKE SURE IT IS FUNCTIONING AS EXPECTED.
 // TODO CONSIDER BREAKING UP THE FILE INTO OTHER FILES TO MAKE IT MORE MODULAR.
+
+// TODO Code is actually incorrect - the state should be updated with the setuserData state hook instead! ===> Fix that.
+
 // Custom hook to manage user data and onboarding state
 export function useUser() {
   // State to track if user is new (hasn't completed onboarding)
