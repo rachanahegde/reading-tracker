@@ -16,9 +16,8 @@ export default function Home() {
   );
 }
 
-// TODO Check if this new user or existing user
-// TODO When user first accesses website, display 2 dragon options to choose from
-// TODO
+// TODO Check if this new user or existing user - track user status using localstorage
+// TODO When user first accesses website, display 2 dragon options to choose from. Then a series of other cards such as background options etc.
 
 // TODO Set up context API with local storage for tracking book data
 // TODO Figure out setting up the book search API
