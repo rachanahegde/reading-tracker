@@ -1,7 +1,14 @@
+import { useContext, createContext } from "react";
+
+// Manages onboarding status, user identity, app entry state
+
+export const UserContext = createContext();
+
 // Provider component for wrapping the app
 export function UserProvider({ children }) {
-  // TODO State to track if user is new (hasn't completed onboarding)
+  // Track if user is new (hasn't completed onboarding)
   const [isNewUser, setIsNewUser] = useState(true);
+
   // Context value object
   const value = {
     isNewUser,
