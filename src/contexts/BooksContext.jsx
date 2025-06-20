@@ -26,74 +26,62 @@ export function BooksProvider({ children }) {
     localStorage.setItem("userData", JSON.stringify(updated));
   };
 
-  // Add book to main library
-  const addBook = (book) => {
-    const updatedBooks = [...books, book];
-    setBooks(updatedBooks);
-    saveToStorage({ books: updatedBooks });
+  // 🔁 Reusable helper to update a book list (state + localStorage)
+  const updateList = (listName, updaterFn) => {
+    const listStateMap = {
+      books: [books, setBooks],
+      wantToRead: [wantToRead, setWantToRead],
+      currentlyReading: [currentlyReading, setCurrentlyReading],
+      finishedBooks: [finishedBooks, setFinishedBooks],
+    };
+
+    const [currentList, setList] = listStateMap[listName];
+    const updatedList = updaterFn(currentList);
+
+    setList(updatedList);
+    saveToStorage({ [listName]: updatedList });
   };
 
-  // Remove book from main library
-  const removeBook = (bookId) => {
-    const updatedBooks = books.filter((book) => book.id !== bookId);
-    setBooks(updatedBooks);
-    saveToStorage({ books: updatedBooks });
-  };
+  // ✅ Public actions (clean, reusable)
+  const addBook = (book) => updateList("books", (list) => [...list, book]);
+  const removeBook = (bookId) =>
+    updateList("books", (list) => list.filter((b) => b.id !== bookId));
 
-  // Add book to want to read
-  const addToWantToRead = (book) => {
-    const updated = [...wantToRead, book];
-    setWantToRead(updated);
-    saveToStorage({ wantToRead: updated });
-  };
+  const addToWantToRead = (book) =>
+    updateList("wantToRead", (list) => [...list, book]);
+  const removeFromWantToRead = (bookId) =>
+    updateList("wantToRead", (list) => list.filter((b) => b.id !== bookId));
 
-  // Remove book from want to read
-  const removeFromWantToRead = (bookId) => {
-    const updated = wantToRead.filter((book) => book.id !== bookId);
-    setWantToRead(updated);
-    saveToStorage({ wantToRead: updated });
-  };
-  // Add book to currently reading
-  const addToCurrentlyReading = (book) => {
-    const updated = [...currentlyReading, book];
-    setCurrentlyReading(updated);
-    saveToStorage({ currentlyReading: updated });
-  };
+  const addToCurrentlyReading = (book) =>
+    updateList("currentlyReading", (list) => [...list, book]);
+  const removeFromCurrentlyReading = (bookId) =>
+    updateList("currentlyReading", (list) =>
+      list.filter((b) => b.id !== bookId)
+    );
 
-  // Remove from currently reading
-  const removeFromCurrentlyReading = (bookId) => {
-    const updated = currentlyReading.filter((book) => book.id !== bookId);
-    setCurrentlyReading(updated);
-    saveToStorage({ currentlyReading: updated });
-  };
-
-  // Call when user finishes a book
   const markBookAsFinished = (book) => {
-    // Avoid duplicates in finishedBooks
+    if (!book?.id)
+      return console.warn("Invalid book passed to markBookAsFinished:", book);
+
     const isAlreadyFinished = finishedBooks.some((b) => b.id === book.id);
     if (isAlreadyFinished) return;
 
-    // Add to finishedBooks
-    const updatedFinishedBooks = [...finishedBooks, book];
+    // Update all three relevant lists
+    const updatedFinished = [...finishedBooks, book];
+    const updatedCurrent = currentlyReading.filter((b) => b.id !== book.id);
+    const updatedWant = wantToRead.filter((b) => b.id !== book.id);
 
-    // Remove from currentlyReading and wantToRead
-    const updatedCurrentlyReading = currentlyReading.filter(
-      (b) => b.id !== book.id
-    );
-    const updatedWantToRead = wantToRead.filter((b) => b.id !== book.id);
+    setFinishedBooks(updatedFinished);
+    setCurrentlyReading(updatedCurrent);
+    setWantToRead(updatedWant);
 
-    // Update state
-    setFinishedBooks(updatedFinishedBooks);
-    setCurrentlyReading(updatedCurrentlyReading);
-    setWantToRead(updatedWantToRead);
-
-    // Update localStorage
     saveToStorage({
-      finishedBooks: updatedFinishedBooks,
-      currentlyReading: updatedCurrentlyReading,
-      wantToRead: updatedWantToRead,
+      finishedBooks: updatedFinished,
+      currentlyReading: updatedCurrent,
+      wantToRead: updatedWant,
     });
-    // TODO update XP or trigger evolution here - i.e. call addXP(points)
+
+    // Hook in XP logic here if needed
   };
 
   //   TODO Add the searchBooks function with async await and API call
