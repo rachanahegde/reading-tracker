@@ -7,13 +7,15 @@ export const BooksContext = createContext();
 
 export function BooksProvider({ children }) {
   const [books, setBooks] = useState([]);
+  const [wantToRead, setWantToRead] = useState([]);
   const [currentlyReading, setCurrentlyReading] = useState([]);
   const [finishedBooks, setFinishedBooks] = useState([]);
 
-  // Load books from localStorage on mount
+  // Load books from localStorage on mount and update the state of the books in the app
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem("userData"));
     if (saved?.books) setBooks(saved.books);
+    if (saved?.wantToRead) setWantToRead(saved.wantToRead);
     if (saved?.currentlyReading) setCurrentlyReading(saved.currentlyReading);
     if (saved?.finishedBooks) setFinishedBooks(saved.finishedBooks);
   }, []);
@@ -38,6 +40,19 @@ export function BooksProvider({ children }) {
     saveToStorage({ books: updatedBooks });
   };
 
+  // Add book to want to read
+  const addToWantToRead = (book) => {
+    const updated = [...wantToRead, book];
+    setWantToRead(updated);
+    saveToStorage({ wantToRead: updated });
+  };
+
+  // Remove book from want to read
+  const removeFromWantToRead = (bookId) => {
+    const updated = wantToRead.filter((book) => book.id !== bookId);
+    setWantToRead(updated);
+    saveToStorage({ wantToRead: updated });
+  };
   // Add book to currently reading
   const addToCurrentlyReading = (book) => {
     const updated = [...currentlyReading, book];
@@ -53,7 +68,31 @@ export function BooksProvider({ children }) {
   };
 
   // Call when user finishes a book
-  const markBookAsFinished = (bookId) => {
+  const markBookAsFinished = (book) => {
+    // Avoid duplicates in finishedBooks
+    const isAlreadyFinished = finishedBooks.some((b) => b.id === book.id);
+    if (isAlreadyFinished) return;
+
+    // Add to finishedBooks
+    const updatedFinishedBooks = [...finishedBooks, book];
+
+    // Remove from currentlyReading and wantToRead
+    const updatedCurrentlyReading = currentlyReading.filter(
+      (b) => b.id !== book.id
+    );
+    const updatedWantToRead = wantToRead.filter((b) => b.id !== book.id);
+
+    // Update state
+    setFinishedBooks(updatedFinishedBooks);
+    setCurrentlyReading(updatedCurrentlyReading);
+    setWantToRead(updatedWantToRead);
+
+    // Update localStorage
+    saveToStorage({
+      finishedBooks: updatedFinishedBooks,
+      currentlyReading: updatedCurrentlyReading,
+      wantToRead: updatedWantToRead,
+    });
     // TODO update XP or trigger evolution here - i.e. call addXP(points)
   };
 
@@ -63,13 +102,16 @@ export function BooksProvider({ children }) {
     <BooksContext.Provider
       value={{
         books,
+        wantToRead,
         currentlyReading,
+        finishedBooks,
         addBook,
         removeBook,
+        addToWantToRead,
+        removeFromWantToRead,
         addToCurrentlyReading,
         removeFromCurrentlyReading,
         markBookAsFinished,
-        finishedBooks,
       }}
     >
       {children}
