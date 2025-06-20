@@ -1,19 +1,21 @@
 // Store & update books, currentlyReading
 // Handle addBook, removeBook, and future searchBooks
 
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 
 export const BooksContext = createContext();
 
 export function BooksProvider({ children }) {
   const [books, setBooks] = useState([]);
   const [currentlyReading, setCurrentlyReading] = useState([]);
+  const [finishedBooks, setFinishedBooks] = useState([]);
 
   // Load books from localStorage on mount
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem("userData"));
     if (saved?.books) setBooks(saved.books);
     if (saved?.currentlyReading) setCurrentlyReading(saved.currentlyReading);
+    if (saved?.finishedBooks) setFinishedBooks(saved.finishedBooks);
   }, []);
 
   const saveToStorage = (newData) => {
@@ -50,6 +52,11 @@ export function BooksProvider({ children }) {
     saveToStorage({ currentlyReading: updated });
   };
 
+  // Call when user finishes a book
+  const markBookAsFinished = (bookId) => {
+    // TODO update XP or trigger evolution here - i.e. call addXP(points)
+  };
+
   //   TODO Add the searchBooks function with async await and API call
 
   return (
@@ -61,6 +68,8 @@ export function BooksProvider({ children }) {
         removeBook,
         addToCurrentlyReading,
         removeFromCurrentlyReading,
+        markBookAsFinished,
+        finishedBooks,
       }}
     >
       {children}
