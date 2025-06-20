@@ -1,1 +1,3 @@
-// Manages dragon type, XP, habitat, evolution logic
+// Manages dragon type, currentXP, habitat, selectDragon, selectHabitat, gainXP, evolution logic
+
+import { createContext, useState } from "react";
