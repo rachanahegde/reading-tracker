@@ -1,33 +1,37 @@
-import { useContext, createContext } from "react";
+import { useContext, createContext, useState } from "react";
 
 // Manages onboarding status, user identity, app entry state
 
+// Create new context object
 export const UserContext = createContext();
 
-// Provider component for wrapping the app
 export function UserProvider({ children }) {
-  // Track if user is new (hasn't completed onboarding)
+  // Tracks whether user is new (has completed onboarding)
   const [isNewUser, setIsNewUser] = useState(true);
 
-  // Context value object
-  const value = {
-    isNewUser,
+  // Side effect runs after component is mounted - retrieves user data from local storage, parses it as JSON and stores it in savedUserData.
+  // If savedUserData exists and has onboardingComplete set to true, update isNewUser
+  useEffect(() => {
+    const savedUserData = JSON.parse(localStorage.getItem("userData"));
+    if (savedUserData?.onboardingComplete) {
+      setIsNewUser(false);
+    }
+  }, []);
+
+  // Mark onboarding as complete
+  const completeOnboarding = () => {
+    const saved = JSON.parse(localStorage.getItem("userData")) || {};
+    localStorage.setItem(
+      "userData",
+      JSON.stringify({ ...saved, onboardingComplete: true })
+    );
+    setIsNewUser(false);
   };
-  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
+
+  // Make isNewUser and completeOnboarding available to child components
+  return (
+    <UserContext.Provider value={{ isNewUser, completeOnboarding }}>
+      {children}
+    </UserContext.Provider>
+  );
 }
-
-// TODO Create context for user data
-// TODO Add state to store user's data
-// const [userData, setUserData] = useState({
-//   dragonType: null, // 'blue' or 'green'
-//   habitat: null, // 'forest' or 'mountain'
-//   books: [], // Array of books user has added
-//   currentlyReading: [], // Books currently being read
-//   currentXP: 0, // Current experience points
-//   totalBooks: 0, // Total books read
-//   onboardingComplete: false, // Flag to track onboarding completion
-// });
-
-// Load user data from localStorage on mount
-// Save user data to localStorage whenever userData changes
-// Function to update user data
