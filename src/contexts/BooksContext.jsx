@@ -6,12 +6,14 @@ import { createContext, useState, useEffect } from "react";
 export const BooksContext = createContext();
 
 export function BooksProvider({ children }) {
+  // Tracking state for different categories of books so UI can easily render categories without filtering a single long array
   const [books, setBooks] = useState([]);
   const [wantToRead, setWantToRead] = useState([]);
   const [currentlyReading, setCurrentlyReading] = useState([]);
   const [finishedBooks, setFinishedBooks] = useState([]);
 
   // Load books from localStorage on mount and update the state of the books in the app
+  //   The ? optional chaining prevents crashing/errors if saved is null
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem("userData"));
     if (saved?.books) setBooks(saved.books);
@@ -26,7 +28,7 @@ export function BooksProvider({ children }) {
     localStorage.setItem("userData", JSON.stringify(updated));
   };
 
-  // 🔁 Reusable helper to update a book list (state + localStorage)
+  // Reusable helper to update a book list (state + localStorage)
   const updateList = (listName, updaterFn) => {
     const listStateMap = {
       books: [books, setBooks],
@@ -42,7 +44,7 @@ export function BooksProvider({ children }) {
     saveToStorage({ [listName]: updatedList });
   };
 
-  // ✅ Public actions (clean, reusable)
+  // Actions for manipulating lists
   const addBook = (book) => updateList("books", (list) => [...list, book]);
   const removeBook = (bookId) =>
     updateList("books", (list) => list.filter((b) => b.id !== bookId));
@@ -81,7 +83,7 @@ export function BooksProvider({ children }) {
       wantToRead: updatedWant,
     });
 
-    // Hook in XP logic here if needed
+    // TODO Hook in XP logic here if needed
   };
 
   //   TODO Add the searchBooks function with async await and API call
