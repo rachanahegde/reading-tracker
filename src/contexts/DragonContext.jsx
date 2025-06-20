@@ -1,5 +1,6 @@
 // Manages dragon type, currentXP, habitat, selectDragon, selectHabitat, gainXP, evolution logic
 import { createContext, useState, useEffect } from "react";
+import { saveToStorage } from "../utils/storage"; // For storing data in local storage
 
 export const DragonContext = createContext();
 
@@ -16,13 +17,6 @@ export function DragonProvider({ children }) {
       setCurrentXP(saved.currentXP || 0);
     }
   }, []);
-
-  // TODO This function is repeated in the BooksContext file - ideally avoid repetition by storing this function in a different place?
-  const saveToStorage = (newData) => {
-    const saved = JSON.parse(localStorage.getItem("userData")) || {};
-    const updated = { ...saved, ...newData };
-    localStorage.setItem("userData", JSON.stringify(updated));
-  };
 
   const selectDragon = (type) => {
     setDragonType(type);

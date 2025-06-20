@@ -3,6 +3,7 @@
 
 import { createContext, useState, useEffect, useContext } from "react";
 import { DragonContext } from "./DragonContext";
+import { saveToStorage } from "../utils/storage"; // For storing data in local storage
 
 export const BooksContext = createContext();
 
@@ -26,12 +27,6 @@ export function BooksProvider({ children }) {
     if (saved?.finishedBooks) setFinishedBooks(saved.finishedBooks);
   }, []);
 
-  const saveToStorage = (newData) => {
-    const saved = JSON.parse(localStorage.getItem("userData")) || {};
-    const updated = { ...saved, ...newData };
-    localStorage.setItem("userData", JSON.stringify(updated));
-  };
-
   // Reusable helper to update a book list (state + localStorage)
   const updateList = (listName, updaterFn) => {
     const listStateMap = {
@@ -53,13 +48,18 @@ export function BooksProvider({ children }) {
   const removeBook = (bookId) =>
     updateList("books", (list) => list.filter((b) => b.id !== bookId));
 
-  const addToWantToRead = (book) =>
+  const addToWantToRead = (book) => {
     updateList("wantToRead", (list) => [...list, book]);
+    gainXP(5); // +5 XP for adding a book to wishlist
+  };
   const removeFromWantToRead = (bookId) =>
     updateList("wantToRead", (list) => list.filter((b) => b.id !== bookId));
 
-  const addToCurrentlyReading = (book) =>
+  const addToCurrentlyReading = (book) => {
     updateList("currentlyReading", (list) => [...list, book]);
+    gainXP(15); // +15 XP for starting a book
+  };
+
   const removeFromCurrentlyReading = (bookId) =>
     updateList("currentlyReading", (list) =>
       list.filter((b) => b.id !== bookId)
@@ -87,7 +87,7 @@ export function BooksProvider({ children }) {
       wantToRead: updatedWant,
     });
 
-    // TODO Hook in XP logic here if needed
+    gainXP(30); // +30 XP for finishing a book 🎉
   };
 
   //   TODO Add the searchBooks function with async await and API call
@@ -112,3 +112,5 @@ export function BooksProvider({ children }) {
     </BooksContext.Provider>
   );
 }
+
+// TODO prevent users from XP farming by adding and removing books repeatedly
