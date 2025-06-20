@@ -3,13 +3,21 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App.jsx";
-
-// TODO Import context providers to manage state across the application
+// Import context providers to manage state across the application
+import { UserProvider } from "./contexts/UserContext";
+import { BooksProvider } from "./contexts/BooksContext";
+import { DragonProvider } from "./contexts/DragonContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <App />
+      <UserProvider>
+        <BooksProvider>
+          <DragonProvider>
+            <App />
+          </DragonProvider>
+        </BooksProvider>
+      </UserProvider>
     </BrowserRouter>
   </StrictMode>
 );
