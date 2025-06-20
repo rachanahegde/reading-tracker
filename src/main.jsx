@@ -12,11 +12,11 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <UserProvider>
-        <BooksProvider>
-          <DragonProvider>
+        <DragonProvider>
+          <BooksProvider>
             <App />
-          </DragonProvider>
-        </BooksProvider>
+          </BooksProvider>
+        </DragonProvider>
       </UserProvider>
     </BrowserRouter>
   </StrictMode>

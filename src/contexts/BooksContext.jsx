@@ -1,11 +1,15 @@
 // Store & update books, currentlyReading
 // Handle addBook, removeBook, and future searchBooks
 
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
+import { DragonContext } from "./DragonContext";
 
 export const BooksContext = createContext();
 
 export function BooksProvider({ children }) {
+  // Make gainXP available in order to reward uesr with XP for adding books to lists
+  const { gainXP } = useContext(DragonContext);
+
   // Tracking state for different categories of books so UI can easily render categories without filtering a single long array
   const [books, setBooks] = useState([]);
   const [wantToRead, setWantToRead] = useState([]);

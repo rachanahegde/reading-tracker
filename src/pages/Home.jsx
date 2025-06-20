@@ -2,6 +2,11 @@
 import MainCreatureCard from "../components/MainCreatureCard";
 import CurrentlyReading from "../components/CurrentlyReading";
 import ProgressUpdates from "../components/ProgressUpdates";
+// Import context providers
+import { useContext } from "react";
+import { UserContext } from "../contexts/UserContext";
+import { BooksContext } from "../contexts/BooksContext";
+import { DragonContext } from "../contexts/DragonContext";
 
 export default function Home() {
   return (
